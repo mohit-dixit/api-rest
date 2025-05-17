@@ -1,8 +1,8 @@
 spring:
  datasource:
-   url: jdbc:sqlserver://localhost:1433;encrypt=true;trustServerCertificate=true;databaseName=companydb
-   username: mohit
-   password: mohit2
+   url: ${DATASOURCE_URL}
+   username: ${DATASOURCE_USER}
+   password: ${DATASOURCE_PASSWORD}
    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
  jpa:
     show-sql: true    
@@ -11,3 +11,5 @@ spring:
      matching-strategy: ant_path_matcher
 server:
  port: 8080
+frontend:
+  url: ${FRONTEND_URL}
