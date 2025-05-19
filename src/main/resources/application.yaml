@@ -5,7 +5,8 @@ spring:
    password: ${DATASOURCE_PASSWORD}
    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
  jpa:
-    show-sql: true    
+    show-sql: true
+    hibernate.ddl-auto: update    
  mvc:
    pathmatch:
      matching-strategy: ant_path_matcher
@@ -13,3 +14,4 @@ server:
  port: 8080
 frontend:
   url: ${FRONTEND_URL}
+  urlFirebase: ${FRONTEND_URL_FIREBASE}
