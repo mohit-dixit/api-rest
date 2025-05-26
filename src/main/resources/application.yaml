@@ -3,10 +3,11 @@ spring:
    url: ${DATASOURCE_URL}
    username: ${DATASOURCE_USER}
    password: ${DATASOURCE_PASSWORD}
-   driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+   driver-class-name: ${DATASOURCE_DRIVER_CLASS_NAME}
  jpa:
     show-sql: true
-    hibernate.ddl-auto: update    
+    hibernate.ddl-auto: update
+    properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect    
  mvc:
    pathmatch:
      matching-strategy: ant_path_matcher
