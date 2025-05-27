@@ -45,7 +45,7 @@ public class UsersResource {
     }
 
     @PostMapping(value = "/login")
-    public Users add(Users user) {
-        return this.service.add(user);
+    public Boolean loginUser(@RequestBody Users user) {
+        return this.service.login(user);
     }
 }

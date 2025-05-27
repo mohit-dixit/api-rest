@@ -45,4 +45,12 @@ public class UsersService {
     public void delete(Long id){
         this.repository.deleteById(id);
     }
+
+    public Boolean login(Users user) {
+        Optional<Users> usr = this.repository.findByUsername(user.getUsername());
+        if (usr.isPresent()) {
+            return usr.get().getPassword().equals(user.getPassword());
+        }
+        return false;
+    }
 }
