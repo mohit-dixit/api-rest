@@ -3,6 +3,7 @@ package com.alloymobile.restapi.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.alloymobile.restapi.persistence.Department;
@@ -18,7 +19,7 @@ public class DepartmentService {
     }
 
     public List<Department> getAll(){
-        return this.repository.findAll();
+        return this.repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     public Department getById(Long id){

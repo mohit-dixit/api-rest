@@ -5,35 +5,44 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.alloymobile.restapi.persistence.RoleRepository;
 import com.alloymobile.restapi.persistence.Users;
+import com.alloymobile.restapi.persistence.Role;
 import com.alloymobile.restapi.persistence.UsersRepository;
 
 @Service
 public class UsersService {
 
     UsersRepository repository;
+    RoleRepository rolerepository;
 
-    public UsersService(UsersRepository repository) {
+    public UsersService(UsersRepository repository, RoleRepository rolerepository) {
+        this.rolerepository = rolerepository;
         this.repository = repository;
     }
 
-    public List<Users> getAll(){
+    public List<Users> getAll() {
         return this.repository.findAll();
     }
 
-    public Users getById(Long id){
+    public Users getById(Long id) {
         return this.repository.findById(id).get();
     }
 
-    public Users add(Users user){
-        user.setRole("USER"); // Default role
-        user.setActive(true); // Default active status
-        return this.repository.save(user);
+    public Users add(Users user) {
+        Optional<Role> role = this.rolerepository.findByRolename("USER");
+        if (role.isPresent()) {
+            Long roleid = role.get().getRole_id();
+            user.setRole(roleid); // Default role
+            user.setActive(true); // Default active status
+            return this.repository.save(user);
+        }
+        return null;
     }
 
-    public Users update(Long id, Users user){
+    public Users update(Long id, Users user) {
         Optional<Users> usr = this.repository.findById(id);
-        if(usr.isPresent()){
+        if (usr.isPresent()) {
             usr.get().setUsername(user.getUsername());
             usr.get().setEmail(user.getEmail());
             usr.get().setPassword(user.getPassword());
@@ -42,7 +51,7 @@ public class UsersService {
         throw new RuntimeException();
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         this.repository.deleteById(id);
     }
 

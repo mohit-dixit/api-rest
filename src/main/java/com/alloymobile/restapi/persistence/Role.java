@@ -8,16 +8,11 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Users {
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    private Long role_id;
     
-    private String username; 
-    private String email; 
-    private String password;
-    private Long role;
-    private boolean isActive;
-
+    private String rolename;
 }
