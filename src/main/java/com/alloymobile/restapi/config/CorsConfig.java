@@ -9,11 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CorsConfig {
 
-    @Value("${frontend.url}")
-    private String frontendUrlLocal;
-
-    @Value("${frontend.urlFirebase}")
-    private String frontendUrlFireBase;
+    @Value("${corsallowedorigins}")
+    private String corsallowedorigins;
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -21,7 +18,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins(frontendUrlLocal, frontendUrlFireBase)
+                        .allowedOrigins(corsallowedorigins)
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);

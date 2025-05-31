@@ -1,0 +1,20 @@
+spring:
+ datasource:
+   url: jdbc:postgresql://google/companydb?cloudSqlInstance=springboot-restapi-461412:asia-south2:springbootapidb&socketFactory=com.google.cloud.sql.postgres.SocketFactory
+   username: postgres
+   password: root
+   driver-class-name: org.postgresql.Driver
+ jpa:
+    show-sql: true
+    hibernate.ddl-auto: update
+    hibernate.hbm2ddl.auto: update
+    properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+    properties.hibernate.default_schema: public   
+ mvc:
+   pathmatch:
+     matching-strategy: ant_path_matcher
+server:
+ port: 8080
+frontend:
+  url: http://localhost:4200
+  urlFirebase: https://uiangularapp.web.app

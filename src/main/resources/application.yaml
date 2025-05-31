@@ -1,19 +1,17 @@
 spring:
  datasource:
-   url: ${DATASOURCE_URL}
-   username: ${DATASOURCE_USER}
-   password: ${DATASOURCE_PASSWORD}
-   driver-class-name: ${DATASOURCE_DRIVER_CLASS_NAME}
+   url: ${DATASOURCE_URL_GCP_POSTGRESQL}
+   username: ${DATASOURCE_USER_GCP_POSTGRESQL}
+   password: ${DATASOURCE_PASSWORD_GCP_POSTGRESQL}
+   driver-class-name: ${DATASOURCE_DRIVER_CLASS_NAME_POSTGRESQL}
  jpa:
     show-sql: true
     hibernate.ddl-auto: update
     hibernate.hbm2ddl.auto: update
-    properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect    
+    properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+    properties.hibernate.default_schema: public   
  mvc:
    pathmatch:
-     matching-strategy: ant_path_matcher
-server:
- port: 8080
-frontend:
-  url: ${FRONTEND_URL}
-  urlFirebase: ${FRONTEND_URL_FIREBASE}
+    matching-strategy: ant_path_matcher
+server.port: ${SERVER_PORT}
+corsallowedorigins: ${CORS_ALLOWED_ORIGINS}
