@@ -1,5 +1,7 @@
 package com.alloymobile.restapi.resource;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.RestController;
 import com.alloymobile.restapi.persistence.Users;
 import com.alloymobile.restapi.service.UsersService;
@@ -30,7 +32,7 @@ public class UsersResource {
     }
 
     @PostMapping(value = "/signup")
-    public Users add(Users user) {
+    public Map<String, Object> add(Users user) {
         return this.service.add(user);
     }
 

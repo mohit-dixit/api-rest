@@ -1,6 +1,8 @@
 package com.alloymobile.restapi.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -29,15 +31,36 @@ public class UsersService {
         return this.repository.findById(id).get();
     }
 
-    public Users add(Users user) {
-        Optional<Role> role = this.rolerepository.findByRolename("USER");
-        if (role.isPresent()) {
-            Long roleid = role.get().getRole_id();
-            user.setRole(roleid); // Default role
-            user.setActive(true); // Default active status
-            return this.repository.save(user);
+    public Map<String, Object> add(Users user) {
+        Map<String, Object> response = new HashMap<>();
+        try {            
+            Optional<Users> usr = this.repository.findByUsername(user.getUsername());
+            if (usr.isPresent()) {
+                response.put("message", "Username already exists. Please choose a different username.");
+                response.put("user", null);
+                response.put("success", false);
+            } else {
+                Optional<Role> role = this.rolerepository.findByRolename("USER");
+                if (role.isPresent()) {
+                    Long roleid = role.get().getRole_id();
+                    user.setRole(roleid); // Default role
+                    user.setActive(true); // Default active status
+                    Users savedUser = this.repository.save(user);
+                    response.put("message", "User created successfully.");
+                    response.put("user", savedUser);
+                    response.put("success", true);
+                } else {
+                    response.put("message", "Error in creating User. Please check the logs.");
+                    response.put("user", null);
+                    response.put("success", false);
+                }
+            }
+
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error in creating User. Please check the logs.");
         }
-        return null;
     }
 
     public Users update(Long id, Users user) {
