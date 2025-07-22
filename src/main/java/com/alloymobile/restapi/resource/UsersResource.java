@@ -46,8 +46,8 @@ public class UsersResource {
         this.service.delete(id);
     }
 
-    @PostMapping(value = "/login")
-    public Boolean loginUser(@RequestBody Users user) {
-        return this.service.login(user);
-    }
+    // @PostMapping(value = "/login")
+    // public Boolean loginUser(@RequestBody Users user) {
+    //     return this.service.login(user);
+    // }
 }
