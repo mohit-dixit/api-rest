@@ -27,6 +27,11 @@ public class JwtUtil {
         return extractUsername(token).equals(username) && !isTokenExpired(token);
     }
 
+    public Date extractTokenExpiry(String token) {
+        return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody().getExpiration();
+    }
+
+
     private boolean isTokenExpired(String token) {
         Date expiration = Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody().getExpiration();
         return expiration.before(new Date());

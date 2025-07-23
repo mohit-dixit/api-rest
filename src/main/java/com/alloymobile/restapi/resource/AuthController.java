@@ -1,5 +1,7 @@
 package com.alloymobile.restapi.resource;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,7 +34,11 @@ public class AuthController {
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
         String token = jwtUtil.generateToken(userDetails.getUsername());
-        return new AuthResponse(true, "Authentication successful", token);
+        return new AuthResponse(true,
+                "Authentication successful",
+                token,
+                jwtUtil.extractUsername(token),
+                jwtUtil.extractTokenExpiry(token));
     }
 }
 
@@ -40,16 +46,22 @@ class AuthResponse {
     private boolean success;
     private String message;
     private String token;
+    private String username;
+    private Date tokenExpiry;
 
-    public AuthResponse(boolean success, String message, String token) {
+    public AuthResponse(boolean success, String message, String token, String username,Date tokenExpiry) {
         this.success = success;
         this.message = message;
         this.token = token;
+        this.username = username;
+        this.tokenExpiry = tokenExpiry;
     }
 
     public boolean isSuccess() { return success; }
     public String getMessage() { return message; }
     public String getToken() { return token; }
+    public String getUsername() { return username; }
+    public Date getTokenExpiry() { return tokenExpiry; }
 }
 
 class AuthRequest {

@@ -12,6 +12,7 @@ spring:
     properties.hibernate.default_schema: public   
  mvc:
    pathmatch:
-    matching-strategy: ant_path_matcher
+    matching-strategy: ANT_PATH_MATCHER
 server.port: ${SERVER_PORT}
 corsallowedorigins: ${CORS_ALLOWED_ORIGINS}
+corsallowedmethods: ${CORS_ALLOWED_METHODS}
