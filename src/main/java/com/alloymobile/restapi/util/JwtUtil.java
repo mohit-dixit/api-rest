@@ -14,7 +14,7 @@ public class JwtUtil {
         return Jwts.builder()
             .setSubject(username)
             .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 1)) // Token valid for 1 minutes
             .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
             .compact();
     }
