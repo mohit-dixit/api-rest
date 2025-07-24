@@ -36,11 +36,17 @@ public class AuthController {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         } catch (AuthenticationException e) {
-            throw new Exception("Incorrect username or password", e);
+                return new AuthResponse(false,
+                true,
+                "Incorrect username or password",
+                null,
+                null,
+                null);
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
         String token = jwtUtil.generateToken(userDetails.getUsername());
         return new AuthResponse(true,
+                false,
                 "Authentication successful",
                 token,
                 jwtUtil.extractUsername(token),
@@ -58,13 +64,20 @@ public class AuthController {
 
 class AuthResponse {
     private boolean success;
+    private boolean failure;
     private String message;
     private String token;
     private String username;
     private Date tokenExpiry;
 
-    public AuthResponse(boolean success, String message, String token, String username, Date tokenExpiry) {
+    public AuthResponse(boolean success,
+            boolean failure,
+            String message,
+            String token,
+            String username,
+            Date tokenExpiry) {
         this.success = success;
+        this.failure = failure;
         this.message = message;
         this.token = token;
         this.username = username;
@@ -73,6 +86,10 @@ class AuthResponse {
 
     public boolean isSuccess() {
         return success;
+    }
+
+    public boolean isFailure() {
+        return failure;
     }
 
     public String getMessage() {
