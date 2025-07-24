@@ -17,7 +17,7 @@ public class UsersResource {
 
     UsersService service;
 
-    public UsersResource(UsersService service){
+    public UsersResource(UsersService service) {
         this.service = service;
     }
     
@@ -45,9 +45,4 @@ public class UsersResource {
     public void delete(@PathVariable Long id){
         this.service.delete(id);
     }
-
-    // @PostMapping(value = "/login")
-    // public Boolean loginUser(@RequestBody Users user) {
-    //     return this.service.login(user);
-    // }
 }

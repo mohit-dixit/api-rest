@@ -8,7 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
+import com.alloymobile.restapi.service.TokenBlackListService;
 import com.alloymobile.restapi.service.UsersService;
 import com.alloymobile.restapi.util.JwtUtil;
 
@@ -23,6 +23,12 @@ public class AuthController {
 
     @Autowired
     private UsersService userDetailsService;
+
+    private final TokenBlackListService tokenBlacklistService;
+
+    public AuthController(TokenBlackListService tokenBlacklistService) {
+        this.tokenBlacklistService = tokenBlacklistService;
+    }
 
     @PostMapping("/authenticate")
     public AuthResponse createAuthenticationToken(@RequestBody AuthRequest authRequest) throws Exception {
@@ -40,6 +46,14 @@ public class AuthController {
                 jwtUtil.extractUsername(token),
                 jwtUtil.extractTokenExpiry(token));
     }
+
+    @PostMapping("/signout")
+    public SignOutResponse logout(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        tokenBlacklistService.blacklistToken(token);
+        return new SignOutResponse(true,
+                "Logged out successfully");
+    }
 }
 
 class AuthResponse {
@@ -49,7 +63,7 @@ class AuthResponse {
     private String username;
     private Date tokenExpiry;
 
-    public AuthResponse(boolean success, String message, String token, String username,Date tokenExpiry) {
+    public AuthResponse(boolean success, String message, String token, String username, Date tokenExpiry) {
         this.success = success;
         this.message = message;
         this.token = token;
@@ -57,11 +71,25 @@ class AuthResponse {
         this.tokenExpiry = tokenExpiry;
     }
 
-    public boolean isSuccess() { return success; }
-    public String getMessage() { return message; }
-    public String getToken() { return token; }
-    public String getUsername() { return username; }
-    public Date getTokenExpiry() { return tokenExpiry; }
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Date getTokenExpiry() {
+        return tokenExpiry;
+    }
 }
 
 class AuthRequest {
@@ -82,5 +110,23 @@ class AuthRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+}
+
+class SignOutResponse {
+    private boolean success;
+    private String message;
+
+    public SignOutResponse(boolean success, String message) {
+        this.success = success;
+        this.message = message;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

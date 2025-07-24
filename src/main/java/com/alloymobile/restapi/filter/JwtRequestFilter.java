@@ -7,7 +7,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import com.alloymobile.restapi.service.TokenBlackListService;
 import com.alloymobile.restapi.util.JwtUtil;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,10 +21,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
+    private final TokenBlackListService tokenBlacklistService;
 
-    public JwtRequestFilter(UserDetailsService userDetailsService, JwtUtil jwtUtil) {
+    public JwtRequestFilter(UserDetailsService userDetailsService,
+            JwtUtil jwtUtil,
+            TokenBlackListService tokenBlackListService) {
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
+        this.tokenBlacklistService = tokenBlackListService;
     }
 
     @Override
@@ -31,11 +37,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         final String authorizationHeader = request.getHeader("Authorization");
 
         String username = null;
-        String jwt = null;
+        String jwt = null;       
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
             username = jwtUtil.extractUsername(jwt);
+        }
+
+        if (jwt != null && tokenBlacklistService.isTokenBlacklisted(jwt)) {
+            throw new JwtException("Token is blacklisted");
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
