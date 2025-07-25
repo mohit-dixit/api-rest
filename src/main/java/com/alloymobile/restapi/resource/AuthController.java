@@ -56,6 +56,7 @@ public class AuthController {
         try {
             String token = authHeader.replace("Bearer ", "");
             jwtUtil.validateToken(token, extendRequest.getUsername());
+            tokenBlacklistService.blacklistToken(token);
         } catch (AuthenticationException e) {
                return new AuthResponse(false,
                 "Session can not be extended",
