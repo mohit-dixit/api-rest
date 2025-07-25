@@ -51,6 +51,26 @@ public class AuthController {
                 jwtUtil.extractTokenExpiry(token));
     }
 
+    @PostMapping("/extend")
+    public AuthResponse extendAuthenticationToken(@RequestBody ExtendRequest extendRequest, @RequestHeader("Authorization") String authHeader) throws Exception {
+        try {
+            String token = authHeader.replace("Bearer ", "");
+            jwtUtil.validateToken(token, extendRequest.getUsername());
+        } catch (AuthenticationException e) {
+               return new AuthResponse(false,
+                "Session can not be extended",
+                null,
+                null,
+                null);
+        }
+        String token = jwtUtil.generateToken(extendRequest.getUsername());
+        return new AuthResponse(true,
+                "Authentication extended successfully",
+                token,
+                jwtUtil.extractUsername(token),
+                jwtUtil.extractTokenExpiry(token));
+    }
+
     @PostMapping("/signout")
     public SignOutResponse logout(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.replace("Bearer ", "");
@@ -118,6 +138,18 @@ class AuthRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+}
+
+class ExtendRequest {
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
 
