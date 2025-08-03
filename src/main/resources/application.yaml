@@ -13,9 +13,6 @@ spring:
  mvc:
    pathmatch:
     matching-strategy: ANT_PATH_MATCHER
- ai:
-    openai:
-      api-key: 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
  autoconfigure:
     exclude:
       - org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration
