@@ -1,6 +1,9 @@
 package com.alloymobile.restapi.util;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.security.Key;
@@ -34,5 +37,14 @@ public class JwtUtil {
     private boolean isTokenExpired(String token) {
         Date expiration = Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody().getExpiration();
         return expiration.before(new Date());
+    }
+
+    public void setJwtInCookie(HttpServletResponse response, String token) {
+        Cookie cookie = new Cookie("authToken", token);
+        cookie.setHttpOnly(true); // Prevent access from JS
+        cookie.setSecure(true); // Only transmit over HTTPS (important in production)
+        cookie.setPath("/"); // Available throughout the app
+        cookie.setMaxAge(60 * 1); // 1 minute in seconds
+        response.addCookie(cookie);
     }
 }

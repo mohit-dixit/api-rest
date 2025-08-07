@@ -12,6 +12,8 @@ import com.alloymobile.restapi.service.TokenBlackListService;
 import com.alloymobile.restapi.service.UsersService;
 import com.alloymobile.restapi.util.JwtUtil;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @RestController
 public class AuthController {
 
@@ -31,7 +33,8 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate")
-    public AuthResponse createAuthenticationToken(@RequestBody AuthRequest authRequest) throws Exception {
+    public AuthResponse createAuthenticationToken(@RequestBody AuthRequest authRequest,
+            HttpServletResponse response) throws Exception {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
@@ -42,8 +45,11 @@ public class AuthController {
                 null,
                 null);
         }
+
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
         String token = jwtUtil.generateToken(userDetails.getUsername());
+        jwtUtil.setJwtInCookie(response, token);
+
         return new AuthResponse(true,
                 "Authentication successful",
                 token,
