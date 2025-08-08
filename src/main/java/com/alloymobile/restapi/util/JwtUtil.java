@@ -50,12 +50,10 @@ public class JwtUtil {
     }
 
     public void setJwtInCookie(HttpServletResponse response, String token) {
-        Cookie cookie = new Cookie("authToken", token);
-        cookie.setHttpOnly(true); // Prevent access from JS
-        cookie.setSecure(true); // Only transmit over HTTPS (important in production)
-        cookie.setPath("/"); // Available throughout the app
-        cookie.setMaxAge(expirationInMinutes * 60); // Set cookie expiration
-        response.addCookie(cookie);
+        String sameSiteHeader = String.format(
+                "authToken=%s; Max-Age=%d; Path=/; Secure; HttpOnly; SameSite=None",
+                token, expirationInMinutes * 60);
+        response.setHeader("Set-Cookie", sameSiteHeader);
     }
 
     public String extractTokenFromCookies(HttpServletRequest request) {
@@ -70,12 +68,8 @@ public class JwtUtil {
     }
 
     public void clearJwtCookie(HttpServletResponse response) {
-        Cookie jwtCookie = new Cookie("authToken", null);
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(true); // should match the original cookie settings
-        jwtCookie.setPath("/"); // must be the same path as when it was set
-        jwtCookie.setMaxAge(0); // delete immediately
-        response.addCookie(jwtCookie);
+        String expiredCookie = "authToken=; Max-Age=0; Path=/; Secure; HttpOnly; SameSite=None";
+        response.setHeader("Set-Cookie", expiredCookie);
     }
 
     public Integer getTimeoutSeconds() {

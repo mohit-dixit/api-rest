@@ -15,7 +15,7 @@ spring:
     matching-strategy: ANT_PATH_MATCHER
  ai:
     openai:
-      api-key:
+      api-key: ${OPENAI_API_KEY:your_default_api_key}
  autoconfigure:
     exclude:
       - org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration
