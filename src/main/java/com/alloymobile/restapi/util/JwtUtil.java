@@ -14,7 +14,7 @@ public class JwtUtil {
     private static final String SECRET = "werewrewrewrewrewrewrewwerewrewwreewrWREWREWREWREWREWREWRWEREWREWREWRWEREWREWREWREWRWEREWREWREWREWREW";
     private final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
 
-    Integer expirationInMinutes = 2; // 2 minutes
+    Integer expirationInMinutes = 15;
 
     public String generateToken(String username) {
         return Jwts.builder()
