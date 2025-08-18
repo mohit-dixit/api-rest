@@ -1,8 +1,8 @@
 spring:
  datasource:
-   url: jdbc:postgresql://34.131.175.174:5432/companydb
-   username: postgres
-   password: root
+   url: jdbc:postgresql://dpg-d2hf3aer433s739nm3t0-a.singapore-postgres.render.com/companydb_4c76
+   username: mohit
+   password: 608VBIv5FVWfEVcM5XzwTCMxVbVwoymv
    driver-class-name: org.postgresql.Driver
  jpa:
     show-sql: true
